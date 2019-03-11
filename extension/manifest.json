@@ -2,7 +2,7 @@
   "name": "Grzegorz's Site Blocker",
   "description": "This extension blocks unwanted sites.",
   "author": "Grzegorz Milka",
-  "version": "1.0",
+  "version": "1.1",
   "manifest_version": 2,
   "icons": {
       "128": "g_128.png"
@@ -16,7 +16,5 @@
     "scripts": ["background.js"],
     "persistent": true
   },
-  "browser_action": {
-    "default_popup": "popup.html"
-  }
+  "options_page": "options.html"
 }

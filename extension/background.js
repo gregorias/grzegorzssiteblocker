@@ -17,6 +17,14 @@ function block(details) {
   return {cancel: true}
 };
 
+function blockDomainsToFilters(blocked) {
+  let filters = [];
+  for (let b of blocked) {
+    filters.push("*://" + b + "/*");
+  }
+  return filters;
+}
+
 let opt_extraInfoSpec = ["blocking"];
 
 chrome.storage.sync.get('blocked', function(data) {
@@ -25,7 +33,7 @@ chrome.storage.sync.get('blocked', function(data) {
   // Empty filter.urls is interpreted as all URLs are allowed, so we don't set
   // the listener in that case.
   if (data.blocked.length == 0) return;
-  let filter = {urls: data.blocked};
+  let filter = {urls: blockDomainsToFilters(data.blocked)};
   chrome.webRequest.onBeforeRequest.addListener(
       block, filter, opt_extraInfoSpec);
 });
@@ -40,7 +48,7 @@ chrome.storage.onChanged.addListener(function(changes, areaName) {
   // the listener in that case.
   if (changes.blocked.newValue.length == 0) return;
 
-  let filter = {urls: changes.blocked.newValue};
+  let filter = {urls: blockDomainsToFilters(changes.blocked.newValue)};
   chrome.webRequest.onBeforeRequest.addListener(
       block, filter, opt_extraInfoSpec);
 });
