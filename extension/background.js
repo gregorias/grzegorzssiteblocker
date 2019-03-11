@@ -20,7 +20,7 @@ function block(details) {
 function blockDomainsToFilters(blocked) {
   let filters = [];
   for (let b of blocked) {
-    filters.push("*://" + b + "/*");
+    filters.push("*://" + b);
   }
   return filters;
 }
