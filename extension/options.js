@@ -14,18 +14,24 @@ let save = document.getElementById('save');
 function readList() {
   let blocked = [];
   for (let div of list_div.children) {
-    let input = div.children[0];
-    blocked.push(input.value.trim());
+    let toggle = div.children[0];
+    let input = div.children[1];
+    blocked.push([input.value.trim(), toggle.checked]);
   }
   return blocked;
 }
 
-function addField(value) {
-  let input = document.createElement('input');
+function addField(value, enabled) {
   let input_div = document.createElement('div');
+  let toggle = document.createElement('input');
+  let input = document.createElement('input');
   let remove = document.createElement('button');
+  toggle.type = 'checkbox';
+  toggle.checked = enabled;
+  toggle.title = "If checked, the extension blocks this URL pattern."
   input.value = value;
   remove.innerText = 'Delete';
+  input_div.appendChild(toggle);
   input_div.appendChild(input);
   input_div.appendChild(remove);
   list_div.appendChild(input_div);
@@ -34,12 +40,12 @@ function addField(value) {
   }
 }
 getBlockedWithEmptyDefault(function(blocked) {
-  for (let regexp_str of blocked) {
-    addField(regexp_str);
+  for (let [regexp_str, enabled] of blocked) {
+    addField(regexp_str, enabled);
   }
 });
 add.onclick = function(element) {
-  addField("");
+  addField("", false);
 }
 save.onclick = function(element) {
   let blocked = readList();
