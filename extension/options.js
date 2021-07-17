@@ -9,7 +9,6 @@ function getBlockedWithEmptyDefault(callback) {
 }
 
 let list_div = document.getElementById('list');
-let save = document.getElementById('save');
 
 function readList() {
   let blocked = [];
@@ -21,6 +20,13 @@ function readList() {
   return blocked;
 }
 
+function saveState() {
+  let blocked = readList();
+  chrome.storage.sync.set({blocked: blocked}, function() {
+    console.log("Set the blocked list to " + blocked.toString() + ".");
+  });
+}
+
 function addField(value, enabled) {
   let input_div = document.createElement('div');
   let toggle = document.createElement('input');
@@ -29,7 +35,9 @@ function addField(value, enabled) {
   toggle.type = 'checkbox';
   toggle.checked = enabled;
   toggle.title = "If checked, the extension blocks this URL pattern."
+  toggle.addEventListener('change', saveState);
   input.value = value;
+  input.addEventListener('change', saveState);
   remove.innerText = 'Delete';
   input_div.appendChild(toggle);
   input_div.appendChild(input);
@@ -47,9 +55,3 @@ getBlockedWithEmptyDefault(function(blocked) {
 add.onclick = function(element) {
   addField("", false);
 }
-save.onclick = function(element) {
-  let blocked = readList();
-  chrome.storage.sync.set({blocked: blocked}, function() {
-    console.log("Set the blocked list to " + blocked.toString() + ".");
-  });
-};
