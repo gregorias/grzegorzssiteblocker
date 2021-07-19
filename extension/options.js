@@ -39,19 +39,35 @@ function addField(value, enabled) {
   input.value = value;
   input.addEventListener('change', saveState);
   remove.innerText = 'Delete';
+  remove.onclick = function(element) {
+    list_div.removeChild(input_div);
+    saveState();
+  }
   input_div.appendChild(toggle);
   input_div.appendChild(input);
   input_div.appendChild(remove);
   list_div.appendChild(input_div);
-  remove.onclick = function(element) {
-    list_div.removeChild(input_div);
-  }
 }
-getBlockedWithEmptyDefault(function(blocked) {
+
+add.onclick = function(element) {
+  addField("", false);
+  saveState();
+}
+
+function resetAllFields(blocked) {
+  while (list_div.firstChild) {
+    list_div.removeChild(list_div.lastChild);
+  }
   for (let [regexp_str, enabled] of blocked) {
     addField(regexp_str, enabled);
   }
-});
-add.onclick = function(element) {
-  addField("", false);
 }
+
+getBlockedWithEmptyDefault(resetAllFields);
+
+chrome.storage.onChanged.addListener(function(changes, areaName) {
+  if (areaName != "sync") return;
+  if (!changes.blocked) return;
+
+  resetAllFields(changes.blocked.newValue);
+});
