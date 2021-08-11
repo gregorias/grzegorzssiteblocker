@@ -36,16 +36,22 @@ function getBlockedWebsites(blockedWithToggle) {
   return blockedUrls;
 }
 
-chrome.storage.sync.get('blocked', function(data) {
-  if (chrome.runtime.lastError) return;
-  if (!Array.isArray(data.blocked)) return;
-  let blockedUrls = getBlockedWebsites(data.blocked);
+function addBlockingListeners(state) {
+  let blockedUrls = getBlockedWebsites(state);
   // Empty filter.urls is interpreted as all URLs are allowed, so we don't set
   // the listener in that case.
   if (blockedUrls.length == 0) return;
-  let filter = {urls: blockDomainsToFilters(blockedUrls)};
-  chrome.webRequest.onBeforeRequest.addListener(
+  for (let urlToBlock of blockedUrls) {
+    let filter = {urls: blockDomainsToFilters([urlToBlock])};
+    chrome.webRequest.onBeforeRequest.addListener(
       block, filter, opt_extraInfoSpec);
+  }
+}
+
+chrome.storage.sync.get('blocked', function(data) {
+  if (chrome.runtime.lastError) return;
+  if (!Array.isArray(data.blocked)) return;
+  addBlockingListeners(data.blocked);
 });
 
 chrome.storage.onChanged.addListener(function(changes, areaName) {
@@ -53,13 +59,5 @@ chrome.storage.onChanged.addListener(function(changes, areaName) {
   if (!changes.blocked) return;
 
   chrome.webRequest.onBeforeRequest.removeListener(block);
-
-  let blockedUrls = getBlockedWebsites(changes.blocked.newValue);
-  // Empty filter.urls is interpreted as all URLs are allowed, so we don't set
-  // the listener in that case.
-  if (blockedUrls.length == 0) return;
-
-  let filter = {urls: blockDomainsToFilters(blockedUrls)};
-  chrome.webRequest.onBeforeRequest.addListener(
-      block, filter, opt_extraInfoSpec);
+  addBlockingListeners(changes.blocked.newValue);
 });
