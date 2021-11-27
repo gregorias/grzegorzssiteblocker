@@ -13,51 +13,54 @@ chrome.runtime.onInstalled.addListener(function(details) {
   }
 });
 
-function block(details) {
-  return {cancel: true}
-};
-
-function blockDomainsToFilters(blocked) {
-  let filters = [];
-  for (let b of blocked) {
-    filters.push("*://" + b);
+function blockedUrlsToRules(blockedUrls) {
+  let rules = [];
+  let cid = 1;
+  for (let [urlToBlock, enabled] of blockedUrls) {
+    if (!enabled) continue;
+    // Empty URL filters are disallowed by Chrome's API.
+    if (!urlToBlock) continue;
+    rules.push(
+      {
+        id: cid,
+        action: {
+          type: "block"
+        },
+        condition: {
+          urlFilter: "*://" + urlToBlock,
+          resourceTypes: [
+            "main_frame",
+            "sub_frame",
+          ]
+        }
+      }
+    );
+    cid += 1;
   }
-  return filters;
+  return rules
 }
 
-let opt_extraInfoSpec = ["blocking"];
-
-function getBlockedWebsites(blockedWithToggle) {
-  let blockedUrls = []
-  for (let [url, enabled] of blockedWithToggle) {
-    if (enabled)
-      blockedUrls.push(url);
-  }
-  return blockedUrls;
-}
-
-function addBlockingListeners(state) {
-  let blockedUrls = getBlockedWebsites(state);
-  // Empty filter.urls is interpreted as all URLs are allowed, so we don't set
-  // the listener in that case.
-  if (blockedUrls.length == 0) return;
-  for (let urlToBlock of blockedUrls) {
-    let filter = {urls: blockDomainsToFilters([urlToBlock])};
-    chrome.webRequest.onBeforeRequest.addListener(
-      block, filter, opt_extraInfoSpec);
-  }
+function setUrlBlocks(blockedUrls) {
+  chrome.declarativeNetRequest.getDynamicRules(
+    (rules) => {
+      chrome.declarativeNetRequest.updateDynamicRules(
+        {
+          removeRuleIds: rules.map(rule => rule.id),
+          addRules: blockedUrlsToRules(blockedUrls)
+        }
+      );
+    }
+  );
 }
 
 chrome.storage.sync.get('blocked', function(data) {
   if (chrome.runtime.lastError) return;
   if (!Array.isArray(data.blocked)) return;
-  addBlockingListeners(data.blocked);
+  setUrlBlocks(data.blocked);
 });
 
 chrome.storage.onChanged.addListener(function(changes, areaName) {
   if (areaName != "sync") return;
   if (!changes.blocked) return;
-
-  chrome.webRequest.onBeforeRequest.removeListener(block);
-  addBlockingListeners(changes.blocked.newValue);
+  setUrlBlocks(changes.blocked.newValue);
 });
