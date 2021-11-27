@@ -10,7 +10,8 @@ regression](https://github.com/gregorias/grzegorzssiteblocker/issues/1).
 
 Add and enable the following filters:
 
-* `www.google.com/*`
 * `obviouslywrong`
+* ``
+* `www.google.com/*`
 
 Go to www.google.com and verify that it's blocked.
