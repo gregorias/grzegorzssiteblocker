@@ -13,26 +13,24 @@ chrome.runtime.onInstalled.addListener(function(details) {
   }
 });
 
-function blockedUrlsToRules(blockedUrls) {
+async function blockedUrlsToRules(blockedUrls) {
   let rules = [];
   let cid = 1;
   for (let [urlToBlock, enabled] of blockedUrls) {
     if (!enabled) continue;
     // Empty URL filters are disallowed by Chrome's API.
     if (!urlToBlock) continue;
+
+    let isRegexSupportedResult = await chrome.declarativeNetRequest.isRegexSupported({regex: urlToBlock});
+    let condition = isRegexSupportedResult.isSupported ? {regexFilter: urlToBlock} : {urlFilter: "*://" + urlToBlock};
+    condition.resourceTypes = ["main_frame", "sub_frame", "xmlhttprequest", "websocket", "other"];
     rules.push(
       {
         id: cid,
         action: {
           type: "block"
         },
-        condition: {
-          urlFilter: "*://" + urlToBlock,
-          resourceTypes: [
-            "main_frame",
-            "sub_frame",
-          ]
-        }
+        condition: condition
       }
     );
     cid += 1;
@@ -41,10 +39,11 @@ function blockedUrlsToRules(blockedUrls) {
 }
 
 async function setUrlBlocks(blockedUrls) {
-  let rules = await chrome.declarativeNetRequest.getDynamicRules()
+  let old_rules = await chrome.declarativeNetRequest.getDynamicRules()
+  let new_rules = await blockedUrlsToRules(blockedUrls)
   return chrome.declarativeNetRequest.updateDynamicRules({
-    removeRuleIds: rules.map(rule => rule.id),
-    addRules: blockedUrlsToRules(blockedUrls)
+    removeRuleIds: old_rules.map(rule => rule.id),
+    addRules: new_rules
   });
 }
 
