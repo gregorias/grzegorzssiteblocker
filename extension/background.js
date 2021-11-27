@@ -40,17 +40,12 @@ function blockedUrlsToRules(blockedUrls) {
   return rules
 }
 
-function setUrlBlocks(blockedUrls) {
-  chrome.declarativeNetRequest.getDynamicRules(
-    (rules) => {
-      chrome.declarativeNetRequest.updateDynamicRules(
-        {
-          removeRuleIds: rules.map(rule => rule.id),
-          addRules: blockedUrlsToRules(blockedUrls)
-        }
-      );
-    }
-  );
+async function setUrlBlocks(blockedUrls) {
+  let rules = await chrome.declarativeNetRequest.getDynamicRules()
+  return chrome.declarativeNetRequest.updateDynamicRules({
+    removeRuleIds: rules.map(rule => rule.id),
+    addRules: blockedUrlsToRules(blockedUrls)
+  });
 }
 
 chrome.storage.sync.get('blocked', function(data) {
