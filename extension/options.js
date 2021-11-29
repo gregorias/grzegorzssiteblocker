@@ -1,12 +1,6 @@
 'use strict';
 
-function getBlockedWithEmptyDefault(callback) {
-  chrome.storage.sync.get('blocked', function(data) {
-    if (chrome.runtime.lastError) callback([]);
-    else if (!Array.isArray(data.blocked)) callback([]);
-    else callback(data.blocked);
-  });
-}
+import { storage } from './storage.js'
 
 let list_div = document.getElementById('list');
 
@@ -15,16 +9,14 @@ function readList() {
   for (let div of list_div.children) {
     let toggle = div.children[0];
     let input = div.children[1];
-    blocked.push([input.value.trim(), toggle.checked]);
+    blocked.push({pattern: input.value.trim(), enabled: toggle.checked});
   }
   return blocked;
 }
 
 function saveState() {
   let blocked = readList();
-  chrome.storage.sync.set({blocked: blocked}, function() {
-    console.log("Set the blocked list to " + blocked.toString() + ".");
-  });
+  return storage.setRules(blocked);
 }
 
 function addField(value, enabled) {
@@ -54,20 +46,16 @@ add.onclick = function(element) {
   saveState();
 }
 
-function resetAllFields(blocked) {
+function resetAllFields(rules) {
   while (list_div.firstChild) {
     list_div.removeChild(list_div.lastChild);
   }
-  for (let [regexp_str, enabled] of blocked) {
-    addField(regexp_str, enabled);
+  for (let rule of rules) {
+    addField(rule.pattern, rule.enabled);
   }
 }
 
-getBlockedWithEmptyDefault(resetAllFields);
-
-chrome.storage.onChanged.addListener(function(changes, areaName) {
-  if (areaName != "sync") return;
-  if (!changes.blocked) return;
-
-  resetAllFields(changes.blocked.newValue);
-});
+storage.getRules()
+  .then(resetAllFields)
+  .catch(() => {resetAllFields([]);});
+storage.addListener(resetAllFields);

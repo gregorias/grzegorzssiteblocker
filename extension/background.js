@@ -1,28 +1,17 @@
 'use strict';
 
-chrome.runtime.onInstalled.addListener(function(details) {
-  if (details.reason == "install") {
-    // Set blocked in storage.sync if unset.
-    chrome.storage.sync.get('blocked', function(data) {
-      if (chrome.runtime.lastError) return;
-      if (Array.isArray(data.blocked)) return;
-      chrome.storage.sync.set({blocked: []}, function() {
-        console.log("Reset the blocked list.");
-      });
-    });
-  }
-});
+import { storage } from './storage.js'
 
-async function blockedUrlsToRules(blockedUrls) {
+async function myRulesToChromeNetRequestRules(myRules) {
   let rules = [];
   let cid = 1;
-  for (let [urlToBlock, enabled] of blockedUrls) {
-    if (!enabled) continue;
+  for (let rule of myRules) {
+    if (!rule.enabled) continue;
     // Empty URL filters are disallowed by Chrome's API.
-    if (!urlToBlock) continue;
+    if (!rule.pattern) continue;
 
-    let isRegexSupportedResult = await chrome.declarativeNetRequest.isRegexSupported({regex: urlToBlock});
-    let condition = isRegexSupportedResult.isSupported ? {regexFilter: urlToBlock} : {urlFilter: "*://" + urlToBlock};
+    let isRegexSupportedResult = await chrome.declarativeNetRequest.isRegexSupported({regex: rule.pattern});
+    let condition = isRegexSupportedResult.isSupported ? {regexFilter: rule.pattern} : {urlFilter: "*://" + rule.pattern};
     condition.resourceTypes = ["main_frame", "sub_frame", "xmlhttprequest", "websocket", "other"];
     rules.push(
       {
@@ -38,23 +27,18 @@ async function blockedUrlsToRules(blockedUrls) {
   return rules
 }
 
-async function setUrlBlocks(blockedUrls) {
+async function setUrlBlocks(rules) {
   let old_rules = await chrome.declarativeNetRequest.getDynamicRules()
-  let new_rules = await blockedUrlsToRules(blockedUrls)
+  let new_rules = await myRulesToChromeNetRequestRules(rules)
   return chrome.declarativeNetRequest.updateDynamicRules({
     removeRuleIds: old_rules.map(rule => rule.id),
     addRules: new_rules
   });
 }
 
-chrome.storage.sync.get('blocked', function(data) {
-  if (chrome.runtime.lastError) return;
-  if (!Array.isArray(data.blocked)) return;
-  setUrlBlocks(data.blocked);
-});
+async function setUp() {
+  storage.getRules().then(setUrlBlocks);
+}
+setUp();
 
-chrome.storage.onChanged.addListener(function(changes, areaName) {
-  if (areaName != "sync") return;
-  if (!changes.blocked) return;
-  setUrlBlocks(changes.blocked.newValue);
-});
+storage.addListener(setUrlBlocks);
