@@ -50,9 +50,7 @@ function resetAllFields(rules) {
   while (list_div.firstChild) {
     list_div.removeChild(list_div.lastChild);
   }
-  for (let rule of rules) {
-    addField(rule);
-  }
+  rules.forEach(addField);
 }
 
 storage.getRules()
