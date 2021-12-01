@@ -19,16 +19,16 @@ function saveState() {
   return storage.setRules(blocked);
 }
 
-function addField(value, enabled) {
+function addField(rule) {
   let input_div = document.createElement('div');
   let toggle = document.createElement('input');
   let input = document.createElement('input');
   let remove = document.createElement('button');
   toggle.type = 'checkbox';
-  toggle.checked = enabled;
+  toggle.checked = rule.enabled;
   toggle.title = "If checked, the extension blocks this URL pattern."
   toggle.addEventListener('change', saveState);
-  input.value = value;
+  input.value = rule.pattern;
   input.addEventListener('change', saveState);
   remove.innerText = 'Delete';
   remove.onclick = function(element) {
@@ -42,7 +42,7 @@ function addField(value, enabled) {
 }
 
 add.onclick = function(element) {
-  addField("", false);
+  addField({pattern: "", enabled: false});
   saveState();
 }
 
@@ -51,7 +51,7 @@ function resetAllFields(rules) {
     list_div.removeChild(list_div.lastChild);
   }
   for (let rule of rules) {
-    addField(rule.pattern, rule.enabled);
+    addField(rule);
   }
 }
 
