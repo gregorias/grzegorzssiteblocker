@@ -57,3 +57,4 @@ storage.getRules()
   .then(resetAllFields)
   .catch(() => {resetAllFields([]);});
 storage.addListener(resetAllFields);
+window.addEventListener("beforeunload", saveState);
