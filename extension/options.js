@@ -19,6 +19,16 @@ function saveState() {
   return storage.setRules(blocked);
 }
 
+function isRegExpCorrect(pattern) {
+  try { new RegExp(pattern); return true; }
+  catch (e) { return false; }
+}
+
+function checkPatternValidityAndUpdateClass(element) {
+  if (isRegExpCorrect(element.value)) element.classList.remove("incorrect");
+  else element.classList.add("incorrect");
+}
+
 function addField(rule) {
   let input_div = document.createElement('div');
   let toggle = document.createElement('input');
@@ -29,7 +39,9 @@ function addField(rule) {
   toggle.title = "If checked, the extension blocks this URL pattern."
   toggle.addEventListener('change', saveState);
   input.value = rule.pattern;
+  if (!isRegExpCorrect(rule.pattern)) input.classList.add("incorrect");
   input.addEventListener('change', saveState);
+  input.addEventListener('input', () => {checkPatternValidityAndUpdateClass(input);});
   remove.innerText = 'Delete';
   remove.onclick = function(element) {
     list_div.removeChild(input_div);
