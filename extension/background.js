@@ -36,9 +36,30 @@ async function setUrlBlocks(rules) {
   });
 }
 
+function moveCurrentTabToWikipedia() {
+  chrome.tabs.update(
+    undefined,
+    { url: 'https://en.wikipedia.org/wiki/Akrasia' }
+  );
+}
+
+async function checkAndBlockCurrentSite() {
+  let [tab] = await chrome.tabs.query({active: true, currentWindow: true});
+  let rules = await storage.getRules();
+  for (let rule of rules) {
+    if (!rule.enabled) continue;
+    try {
+      let re = new RegExp(rule.pattern);
+      if (tab.url.match(re)) moveCurrentTabToWikipedia();
+    } catch (e) {}
+  }
+}
+
 async function setUp() {
   storage.getRules().then(setUrlBlocks);
 }
 setUp();
 
 storage.addListener(setUrlBlocks);
+chrome.tabs.onActivated.addListener(checkAndBlockCurrentSite);
+chrome.tabs.onUpdated.addListener(checkAndBlockCurrentSite);
