@@ -5,13 +5,9 @@
   "version": "1.13",
   "manifest_version": 3,
   "icons": {
-      "128": "g_128.png"
+    "128": "g_128.png"
   },
-  "permissions": [
-    "declarativeNetRequest",
-    "storage",
-    "tabs"
-  ],
+  "permissions": ["declarativeNetRequest", "storage", "tabs"],
   "background": {
     "service_worker": "background.js",
     "type": "module"
