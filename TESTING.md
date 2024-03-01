@@ -14,4 +14,4 @@ Add and enable the following filters:
 * ``
 * `www.google.com/*`
 
-Go to www.google.com and verify that it's blocked.
+Go to google.com and verify that it’s blocked.
