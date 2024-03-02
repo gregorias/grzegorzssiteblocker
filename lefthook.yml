@@ -1,5 +1,8 @@
 pre-commit:
   parallel: true
+  scripts:
+    "check-version-match":
+      runner: bash
   commands:
     json-prettier:
       tags: style

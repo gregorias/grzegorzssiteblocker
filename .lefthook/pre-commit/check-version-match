@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+#
+# Checks that version numbers are consistent across all files.
+
+NODE_VERSION=$(cat package.json | jq -r '.version')
+CHROME_VERSION=$(cat extension/manifest.json | jq -r '.version')
+test "$NODE_VERSION" = "$CHROME_VERSION"
