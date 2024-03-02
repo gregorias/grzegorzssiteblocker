@@ -1,0 +1,16 @@
+{
+  "name": "grzegorzssiteblocker",
+  "version": "1.13.1",
+  "description": "A simple Chrome extension that blocks undesirable domains, e.g., domains that are a waste of time like Reddit.",
+  "keywords": [
+    "chrome-extension"
+  ],
+  "author": "Grzegorz Milka",
+  "email": "grzegorzmilka@gmail.com",
+  "homepage": "https://github.com/gregorias/grzegorzssiteblocker",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/npm/cli.git"
+  },
+  "license": "ISC"
+}
