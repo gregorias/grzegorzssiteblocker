@@ -2,6 +2,16 @@
 
 This is the documentation file for developers.
 
+## Dev environment setup
+
+This section describes how to setup your development environment.
+
+1. Install Lefthook:
+
+    ```shell
+    lefthook install
+    ```
+
 ## Building
 
 Run `dev/bin/package` to produce the Chrome extension zip file in `build/`.
