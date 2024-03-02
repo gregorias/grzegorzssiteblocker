@@ -1,3 +1,5 @@
+# Grzegorz’s Site Blocker
+
 A simple Chrome extension that blocks undesirable domains, e.g. domains that are
 a waste of time like Reddit.
 

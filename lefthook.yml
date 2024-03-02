@@ -1,3 +1,11 @@
+pre-commit:
+  parallel: true
+  commands:
+    markdownlint:
+      tags: documentation style
+      files: git diff --name-only --cached --diff-filter=AM
+      glob: "*.md"
+      run: markdownlint {files}
 commit-msg:
   commands:
     commitlint:
