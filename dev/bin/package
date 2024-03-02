@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#
+# Packages the extension into a zip file.
+
+TARGET_ZIP="grzegorzssiteblocker.zip"
+
+mkdir -p build || exit 1
+rm -f build/$TARGET_ZIP || exit 1
+zip build/$TARGET_ZIP -r extension/*
