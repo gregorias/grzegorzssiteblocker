@@ -12,6 +12,13 @@ This section describes how to setup your development environment.
     lefthook install
     ```
 
+## Directory structure
+
+- `public/` contains non-JavaScript files that Webpack copies directly into the
+  distribution folder, `dist/`.
+- `src/` contains the JavaScript source files. They are processed by Webpack
+  during the build process.
+
 ## Building
 
 1. Run `npx webpack` to create an unpacked bundle in `dist/`.
