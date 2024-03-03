@@ -14,7 +14,8 @@ This section describes how to setup your development environment.
 
 ## Building
 
-Run `dev/bin/package` to produce the Chrome extension zip file in `build/`.
+1. Run `npx webpack` to create an unpacked bundle in `dist/`.
+2. Run `dev/bin/package` to produce the Chrome extension zip file in `build/`.
 
 ## Release & distribution
 

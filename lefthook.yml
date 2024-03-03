@@ -4,6 +4,11 @@ pre-commit:
     "check-version-match":
       runner: bash
   commands:
+    js-prettier:
+      tags: style
+      files: git diff --name-only --cached --diff-filter=AM
+      glob: "*.{js,jsx,mjs,ts,tsx,mts}"
+      run: prettier -c {staged_files}
     json-prettier:
       tags: style
       glob: "*.json"

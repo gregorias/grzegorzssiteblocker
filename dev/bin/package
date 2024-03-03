@@ -6,4 +6,4 @@ TARGET_ZIP="grzegorzssiteblocker.zip"
 
 mkdir -p build || exit 1
 rm -f build/$TARGET_ZIP || exit 1
-zip build/$TARGET_ZIP -r extension/*
+zip build/$TARGET_ZIP -j dist/*

@@ -1,15 +1,15 @@
-'use strict';
+"use strict";
 
-import { storage } from './storage.js'
+import { storage } from "./storage.js";
 
-let list_div = document.getElementById('list');
+let list_div = document.getElementById("list");
 
 function readList() {
   let blocked = [];
   for (let div of list_div.children) {
     let toggle = div.children[0];
     let input = div.children[1];
-    blocked.push({pattern: input.value.trim(), enabled: toggle.checked});
+    blocked.push({ pattern: input.value.trim(), enabled: toggle.checked });
   }
   return blocked;
 }
@@ -20,8 +20,12 @@ function saveState() {
 }
 
 function isRegExpCorrect(pattern) {
-  try { new RegExp(pattern); return true; }
-  catch (e) { return false; }
+  try {
+    new RegExp(pattern);
+    return true;
+  } catch (e) {
+    return false;
+  }
 }
 
 function checkPatternValidityAndUpdateClass(element) {
@@ -30,33 +34,35 @@ function checkPatternValidityAndUpdateClass(element) {
 }
 
 function addField(rule) {
-  let input_div = document.createElement('div');
-  let toggle = document.createElement('input');
-  let input = document.createElement('input');
-  let remove = document.createElement('button');
-  toggle.type = 'checkbox';
+  let input_div = document.createElement("div");
+  let toggle = document.createElement("input");
+  let input = document.createElement("input");
+  let remove = document.createElement("button");
+  toggle.type = "checkbox";
   toggle.checked = rule.enabled;
-  toggle.title = "If checked, the extension blocks this URL pattern."
-  toggle.addEventListener('change', saveState);
+  toggle.title = "If checked, the extension blocks this URL pattern.";
+  toggle.addEventListener("change", saveState);
   input.value = rule.pattern;
   if (!isRegExpCorrect(rule.pattern)) input.classList.add("incorrect");
-  input.addEventListener('change', saveState);
-  input.addEventListener('input', () => {checkPatternValidityAndUpdateClass(input);});
-  remove.innerText = 'Delete';
-  remove.onclick = function(element) {
+  input.addEventListener("change", saveState);
+  input.addEventListener("input", () => {
+    checkPatternValidityAndUpdateClass(input);
+  });
+  remove.innerText = "Delete";
+  remove.onclick = function (element) {
     list_div.removeChild(input_div);
     saveState();
-  }
+  };
   input_div.appendChild(toggle);
   input_div.appendChild(input);
   input_div.appendChild(remove);
   list_div.appendChild(input_div);
 }
 
-add.onclick = function(element) {
-  addField({pattern: "", enabled: false});
+add.onclick = function (element) {
+  addField({ pattern: "", enabled: false });
   saveState();
-}
+};
 
 function resetAllFields(rules) {
   while (list_div.firstChild) {
@@ -65,8 +71,11 @@ function resetAllFields(rules) {
   rules.forEach(addField);
 }
 
-storage.getRules()
+storage
+  .getRules()
   .then(resetAllFields)
-  .catch(() => {resetAllFields([]);});
+  .catch(() => {
+    resetAllFields([]);
+  });
 storage.addListener(resetAllFields);
 window.addEventListener("beforeunload", saveState);
