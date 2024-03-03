@@ -19,6 +19,11 @@ This section describes how to setup your development environment.
 - `src/` contains the JavaScript source files. They are processed by Webpack
   during the build process.
 
+## Testing
+
+1. Run `npx webpack` to create an unpacked bundle in `dist/`.
+2. Run `npx playwright test` to run automated tests.
+
 ## Building
 
 1. Run `npx webpack` to create an unpacked bundle in `dist/`.

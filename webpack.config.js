@@ -22,7 +22,7 @@ module.exports = {
       {
         test: /\.m?tsx?$/,
         use: "ts-loader",
-        exclude: /node_modules/,
+        exclude: [/node_modules/, /tests/, /playwright\.config\.ts/],
       },
     ],
   },

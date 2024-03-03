@@ -8,5 +8,6 @@
     "rootDir": "src",
     "noEmitOnError": true,
     "typeRoots": ["node_modules/@types"]
-  }
+  },
+  "exclude": ["tests/**", "playwright.config.ts"]
 }
