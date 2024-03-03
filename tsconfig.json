@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "strict": true,
+    "jsx": "react",
     "module": "esnext",
     "target": "es2022",
     "sourceMap": true,
