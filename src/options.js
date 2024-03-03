@@ -1,6 +1,6 @@
 "use strict";
 
-import { storage } from "./storage.js";
+import { storage } from "./storage.mts";
 
 let list_div = document.getElementById("list");
 

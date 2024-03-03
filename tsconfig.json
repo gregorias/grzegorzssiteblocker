@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "module": "esnext",
+    "target": "es2022",
+    "sourceMap": true,
+    "rootDir": "src",
+    "noEmitOnError": true,
+    "typeRoots": ["node_modules/@types"]
+  }
+}

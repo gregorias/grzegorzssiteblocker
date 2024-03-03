@@ -4,24 +4,26 @@
 
 export { storage };
 
+interface Rule {
+  enabled: boolean;
+  pattern: string;
+}
+
 /**
- * @param {Array<Rule>} rules Rules to serialize.
- * @return {Array<[boolean, string]> | null}
+ * Serializes a list of rules into a list of pairs.
+ *
+ * @param rules - Rules to serialize.
+ * @returns The serializable rules.
  */
-function serialize(rules) {
+function serialize(rules: Rule[]): Array<[string, boolean]> | null {
   try {
-    return rules.map((rule) => [rule.pattern, rule.enabled]);
+    return rules.map((rule: Rule) => [rule.pattern, rule.enabled]);
   } catch (e) {
     return null;
   }
 }
 
-/**
- * @param {Array<[boolean, string]>} data Pairs to deserialize.
- * @throws
- * @return {Array<Rule>}
- */
-function deserialize(data) {
+function deserialize(data: Array<[string, boolean]>): Rule[] {
   return data.map((pair) => {
     return { enabled: pair[1], pattern: pair[0] };
   });
@@ -30,7 +32,7 @@ function deserialize(data) {
 /**
  * @return {Promise<Array<Rule>>}
  */
-async function getRules() {
+async function getRules(): Promise<Rule[]> {
   return new Promise(function (resolve, reject) {
     chrome.storage.sync.get("blocked", function (data) {
       if (chrome.runtime.lastError) {
@@ -51,24 +53,24 @@ async function getRules() {
   });
 }
 
-async function setRules(rules) {
+async function setRules(rules: Rule[]): Promise<void> {
   return new Promise(function (resolve, reject) {
     let data = serialize(rules);
     if (data == null) {
       reject(null);
       return;
     }
-    chrome.storage.sync.set({ blocked: serialize(rules) }, function (result) {
+    chrome.storage.sync.set({ blocked: serialize(rules) }, function (): void {
       if (chrome.runtime.lastError) {
         reject();
         return;
       }
-      resolve(result);
+      resolve();
     });
   });
 }
 
-function addListener(listener) {
+function addListener(listener: (arg: Rule[]) => void) {
   chrome.storage.onChanged.addListener(function (changes, areaName) {
     if (areaName != "sync") return;
     if (!changes.blocked) return;
