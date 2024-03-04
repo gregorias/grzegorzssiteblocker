@@ -21,12 +21,11 @@ This section describes how to setup your development environment.
 
 ## Testing
 
-1. Run `npx webpack` to create an unpacked bundle in `dist/`.
-2. Run `npx playwright test` to run automated tests.
+1. Run `just test` to run automated tests.
 
 ## Building
 
-1. Run `npx webpack` to create an unpacked bundle in `dist/`.
+1. Run `just build` to create an unpacked bundle in `dist/`.
 2. Run `dev/bin/package` to produce the Chrome extension zip file in `build/`.
 
 ## Release & distribution
