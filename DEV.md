@@ -12,6 +12,12 @@ This section describes how to setup your development environment.
     lefthook install
     ```
 
+1. Initialize NPM:
+
+    ```shell
+    npm install
+    ```
+
 ## Directory structure
 
 - `public/` contains non-JavaScript files that Webpack copies directly into the
