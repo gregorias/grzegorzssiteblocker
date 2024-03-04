@@ -1,6 +1,7 @@
 "use strict";
 
 import { storage } from "./storage.mts";
+import { isRegexpValid } from "./regexp.mts";
 
 let list_div = document.getElementById("list");
 
@@ -28,11 +29,6 @@ function isRegExpCorrect(pattern) {
   }
 }
 
-function checkPatternValidityAndUpdateClass(element) {
-  if (isRegExpCorrect(element.value)) element.classList.remove("incorrect");
-  else element.classList.add("incorrect");
-}
-
 function addField(rule) {
   let input_div = document.createElement("div");
   let toggle = document.createElement("input");
@@ -40,13 +36,15 @@ function addField(rule) {
   let remove = document.createElement("button");
   toggle.type = "checkbox";
   toggle.checked = rule.enabled;
-  toggle.title = "If checked, the extension blocks this URL pattern.";
+  toggle.title = "If checked, the extension blocks this pattern.";
   toggle.addEventListener("change", saveState);
   input.value = rule.pattern;
   if (!isRegExpCorrect(rule.pattern)) input.classList.add("incorrect");
   input.addEventListener("change", saveState);
-  input.addEventListener("input", () => {
-    checkPatternValidityAndUpdateClass(input);
+  input.addEventListener("input", async () => {
+    const valid = await isRegexpValid(input.value);
+    if (valid) input.classList.remove("incorrect");
+    else input.classList.add("incorrect");
   });
   remove.innerText = "Delete";
   remove.onclick = function (element) {
