@@ -22,6 +22,9 @@ pre-commit:
       tags: style
       glob: "*.{yml,yaml}"
       run: prettier -c {staged_files}
+    test:
+      tags: test
+      run: just test
 commit-msg:
   commands:
     commitlint:
