@@ -31,8 +31,10 @@ function isRegExpCorrect(pattern) {
 
 function addField(rule) {
   let input_div = document.createElement("div");
+  input_div.classList.add("rule");
   let toggle = document.createElement("input");
   let input = document.createElement("input");
+  input.classList.add("pattern");
   let remove = document.createElement("button");
   toggle.type = "checkbox";
   toggle.checked = rule.enabled;
