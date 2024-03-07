@@ -1,6 +1,6 @@
 "use strict";
 
-import { storage } from "./storage.mts";
+import { storage } from "./storage.ts";
 
 async function myRulesToChromeNetRequestRules(myRules) {
   let rules = [];
