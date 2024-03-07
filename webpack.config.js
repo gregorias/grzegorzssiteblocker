@@ -5,7 +5,7 @@ module.exports = {
   mode: "production",
   entry: {
     background: path.resolve(__dirname, "src", "background.js"),
-    options: path.resolve(__dirname, "src", "options.js"),
+    options: path.resolve(__dirname, "src", "options.jsx"),
   },
   module: {
     rules: [
@@ -25,6 +25,9 @@ module.exports = {
         exclude: [/node_modules/, /tests/, /playwright\.config\.ts/],
       },
     ],
+  },
+  resolve: {
+    extensions: [".ts", ".mts", ".tsx", ".js", ".jsx"],
   },
   output: {
     path: path.join(__dirname, "dist"),
