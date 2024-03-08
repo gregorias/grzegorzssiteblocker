@@ -4,10 +4,7 @@
 
 export { storage };
 
-interface Rule {
-  enabled: boolean;
-  pattern: string;
-}
+import { Rule } from "./rule";
 
 /**
  * Serializes a list of rules into a list of pairs.
@@ -29,57 +26,87 @@ function deserialize(data: Array<[string, boolean]>): Rule[] {
   });
 }
 
-/**
- * @return {Promise<Array<Rule>>}
- */
-async function getRules(): Promise<Rule[]> {
-  return new Promise(function (resolve, reject) {
-    chrome.storage.sync.get("blocked", function (data) {
-      if (chrome.runtime.lastError) {
-        reject();
-        return;
-      }
-      if (!data.blocked) {
-        resolve([]);
-        return;
-      }
-      try {
-        let rules = deserialize(data.blocked);
-        resolve(rules);
-      } catch (e) {
-        reject(e);
-      }
-    });
-  });
-}
+// The listener accepted by `storage.addListener`.
+type StorageListener = (newRules: Rule[]) => void;
+// The listener accepted by `chrome.storage.onChanged.addListener`.
+type ChromeListener = (
+  changes: { [key: string]: chrome.storage.StorageChange },
+  areaName: string,
+) => void;
 
-async function setRules(rules: Rule[]): Promise<void> {
-  return new Promise(function (resolve, reject) {
-    let data = serialize(rules);
-    if (data == null) {
-      reject(null);
-      return;
+class Storage {
+  clientListenersAndChromeListeners: Array<[StorageListener, ChromeListener]> =
+    [];
+
+  async setRules(rules: Rule[]): Promise<void> {
+    return new Promise(function (resolve, reject) {
+      let data = serialize(rules);
+      if (data == null) {
+        reject(null);
+        return;
+      }
+      chrome.storage.sync.set({ blocked: serialize(rules) }, function (): void {
+        if (chrome.runtime.lastError) {
+          reject();
+          return;
+        }
+        resolve();
+      });
+    });
+  }
+
+  async getRules(): Promise<Rule[]> {
+    return new Promise(function (resolve, reject) {
+      chrome.storage.sync.get("blocked", function (data) {
+        if (chrome.runtime.lastError) {
+          reject();
+          return;
+        }
+        if (!data.blocked) {
+          resolve([]);
+          return;
+        }
+        try {
+          let rules = deserialize(data.blocked);
+          resolve(rules);
+        } catch (e) {
+          reject(e);
+        }
+      });
+    });
+  }
+
+  /**
+   * Adds a change listener.
+   *
+   * @param {StorageListener} listener
+   */
+  addListener(listener: StorageListener) {
+    let chromeListener: ChromeListener = (changes, areaName) => {
+      if (areaName != "sync") return;
+      if (!changes.blocked) return;
+      listener(deserialize(changes.blocked.newValue));
+    };
+    this.clientListenersAndChromeListeners.push([listener, chromeListener]);
+    chrome.storage.onChanged.addListener(chromeListener);
+  }
+
+  /**
+   * Removes a change listener.
+   *
+   * @param {StorageListener} listener - [TODO:description]
+   */
+  removeListener(listener: StorageListener) {
+    let index = this.clientListenersAndChromeListeners.length;
+    while (index > 0) {
+      index -= 1;
+      if (this.clientListenersAndChromeListeners[index][0] === listener) {
+        let chromeListener = this.clientListenersAndChromeListeners[index][1];
+        chrome.storage.onChanged.removeListener(chromeListener);
+        this.clientListenersAndChromeListeners.splice(index, 1);
+      }
     }
-    chrome.storage.sync.set({ blocked: serialize(rules) }, function (): void {
-      if (chrome.runtime.lastError) {
-        reject();
-        return;
-      }
-      resolve();
-    });
-  });
+  }
 }
 
-function addListener(listener: (arg: Rule[]) => void) {
-  chrome.storage.onChanged.addListener(function (changes, areaName) {
-    if (areaName != "sync") return;
-    if (!changes.blocked) return;
-    listener(deserialize(changes.blocked.newValue));
-  });
-}
-
-const storage = {
-  getRules: getRules,
-  setRules: setRules,
-  addListener: addListener,
-};
+const storage = new Storage();

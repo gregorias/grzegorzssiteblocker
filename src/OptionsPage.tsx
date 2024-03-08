@@ -34,7 +34,9 @@ export function OptionsPage(_props: OptionsPageProps): React.ReactElement {
 
   useEffect(() => {
     storage.addListener(setRules);
-    // TODO: Unsubscribe from the listener when the component is unmounted.
+    () => {
+      storage.removeListener(setRules);
+    };
   }, []);
 
   return (
@@ -46,7 +48,6 @@ export function OptionsPage(_props: OptionsPageProps): React.ReactElement {
           storage.setRules([...rules, new Rule(false, "")]);
         }}
       />
-      ,
     </>
   );
 }
