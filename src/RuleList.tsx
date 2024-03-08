@@ -3,6 +3,7 @@ import React from "react";
 import { Rule } from "./rule";
 import { RuleElement } from "./RuleElement";
 import Button from "@mui/material/Button/Button";
+import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 
 interface RuleListProps {
   rules: Array<Rule>;
@@ -31,7 +32,12 @@ export function RuleList(props: RuleListProps): React.ReactElement {
           />
         );
       })}
-      <Button onClick={props.onAddRule} variant="contained" fullWidth={true}>
+      <Button
+        onClick={props.onAddRule}
+        variant="contained"
+        fullWidth={true}
+        endIcon={<AddCircleOutlineRoundedIcon />}
+      >
         Add
       </Button>
     </>
