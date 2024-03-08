@@ -12,10 +12,10 @@ test("correct rules still block event if there are incorrect patterns", async ({
   await page.goto(`chrome-extension://${extensionId}/options.html`);
   await page.getByText("Add").click();
   await page.getByText("Add").click();
-  await page.locator("input.pattern").nth(0).fill("[aasdf");
+  await page.locator('input[type="text"]').nth(0).fill("[aasdf");
   await page.getByRole("checkbox").nth(0).click();
-  await page.locator("input.pattern").nth(1).click();
-  await page.locator("input.pattern").nth(1).fill("google");
+  await page.locator('input[type="text"]').nth(1).click();
+  await page.locator('input[type="text"]').nth(1).fill("google");
   await page.getByRole("checkbox").nth(1).click();
 
   try {

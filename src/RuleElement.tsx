@@ -2,6 +2,9 @@ import React, { useEffect } from "react";
 
 import { isRegexpValid } from "./regexp";
 import { Rule } from "./rule";
+import Checkbox from "@mui/material/Checkbox";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
 interface RuleElementProps {
   rule: Rule;
@@ -26,24 +29,31 @@ export function RuleElement(props: RuleElementProps): React.ReactElement {
 
   return (
     <div className="rule">
-      <input
-        type="checkbox"
-        title="If checked, the extension blocks this pattern."
+      <Checkbox
         checked={props.rule.enabled}
         onChange={(e) => {
           props.onRuleChange(new Rule(e.target.checked, props.rule.pattern));
         }}
-      ></input>
-      <input
-        type="text"
-        className={"pattern" + (isPatternValid ? "" : " incorrect")}
-        title="The pattern to block."
+      />
+      <TextField
+        placeholder="reddit.com/.*$"
+        variant="standard"
         value={props.rule.pattern}
+        inputProps={{
+          autoCorrect: "off",
+        }}
+        classes={{ root: "pattern" }}
+        error={!isPatternValid}
+        helperText={
+          !isPatternValid ? "Enter a valid regular expression" : undefined
+        }
         onChange={(e) => {
           props.onRuleChange(new Rule(props.rule.enabled, e.target.value));
         }}
-      ></input>
-      <button onClick={props.onDelete}>Delete</button>
+      />
+      <Button onClick={props.onDelete} variant="outlined">
+        Delete
+      </Button>
     </div>
   );
 }
