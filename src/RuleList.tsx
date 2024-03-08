@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { Rule } from "./rule";
 import { RuleElement } from "./RuleElement";
+import Button from "@mui/material/Button/Button";
 
 interface RuleListProps {
   rules: Array<Rule>;
@@ -30,7 +31,9 @@ export function RuleList(props: RuleListProps): React.ReactElement {
           />
         );
       })}
-      <button onClick={props.onAddRule}>Add</button>
+      <Button onClick={props.onAddRule} variant="contained" fullWidth={true}>
+        Add
+      </Button>
     </>
   );
 }
