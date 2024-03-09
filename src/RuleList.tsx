@@ -32,14 +32,16 @@ export function RuleList(props: RuleListProps): React.ReactElement {
           />
         );
       })}
-      <Button
-        onClick={props.onAddRule}
-        variant="contained"
-        fullWidth={true}
-        endIcon={<AddCircleOutlineRoundedIcon />}
-      >
-        Add
-      </Button>
+      <div className="add">
+        <Button
+          onClick={props.onAddRule}
+          variant="contained"
+          fullWidth={true}
+          endIcon={<AddCircleOutlineRoundedIcon />}
+        >
+          Add
+        </Button>
+      </div>
     </>
   );
 }

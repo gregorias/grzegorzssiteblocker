@@ -35,22 +35,24 @@ export function RuleElement(props: RuleElementProps): React.ReactElement {
           props.onRuleChange(new Rule(e.target.checked, props.rule.pattern));
         }}
       />
-      <TextField
-        placeholder="reddit.com/.*$"
-        variant="standard"
-        value={props.rule.pattern}
-        inputProps={{
-          autoCorrect: "off",
-        }}
-        classes={{ root: "pattern" }}
-        error={!isPatternValid}
-        helperText={
-          !isPatternValid ? "Enter a valid regular expression" : undefined
-        }
-        onChange={(e) => {
-          props.onRuleChange(new Rule(props.rule.enabled, e.target.value));
-        }}
-      />
+      <div className="rule--pattern">
+        <TextField
+          placeholder="facebook.com"
+          variant="standard"
+          value={props.rule.pattern}
+          inputProps={{
+            autoCorrect: "off",
+          }}
+          classes={{ root: "pattern" }}
+          error={!isPatternValid}
+          helperText={
+            !isPatternValid ? "Enter a valid regular expression" : undefined
+          }
+          onChange={(e) => {
+            props.onRuleChange(new Rule(props.rule.enabled, e.target.value));
+          }}
+        />
+      </div>
       <Button onClick={props.onDelete} variant="outlined">
         Delete
       </Button>

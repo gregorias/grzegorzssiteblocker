@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <!--
@@ -9,27 +9,41 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+    />
     <style>
-body {
-  font-family: "Roboto", sans-serif;
-  min-width: 28em;
-  background-color: #ffebee
-}
-button {
-  outline: none;
-}
-div {
-  margin: 5px;
-}
-button {
-  margin: 2px;
-}
+      body {
+        font-family: "Roboto", sans-serif;
+        min-width: 28em;
+        background-color: #ffebee;
+      }
+      button {
+        outline: none;
+      }
+      button {
+        margin: 2px;
+      }
+      .rule {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-block: 0.125rem;
+      }
+      .rule--pattern {
+        /* Helps to align the pattern input with the add button. */
+        margin-block-start: 0.25rem;
+      }
+      .add {
+        padding: 0.5rem 1.25rem;
+      }
     </style>
   </head>
   <body>
     <div>
-      <p>Provide a RE2 regular expression as a pattern to block, e.g., <code>youtube.com/.*</code>.</p>
+      <p>
+        Provide a RE2 regular expression as a pattern to block, e.g.,
+        <code>youtube.com/.*</code>.
+      </p>
     </div>
     <div id="react-list"></div>
     <script type="module" src="options.js"></script>
