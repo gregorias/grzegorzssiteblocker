@@ -38,3 +38,10 @@ This section describes how to setup your development environment.
 
 Upload the built zip file on
 [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole).
+
+## ADRs
+
+### Drag & Drop
+
+I couldn’t make drag & drop work of the list work in the popup, so I abandoned
+the attempt.
