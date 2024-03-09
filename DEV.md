@@ -31,10 +31,11 @@ This section describes how to setup your development environment.
 
 ## Building
 
-1. Run `just build` to create an unpacked bundle in `dist/`.
-2. Run `dev/bin/package` to produce the Chrome extension zip file in `build/`.
+Run `just build` to create an unpacked bundle in `dist/`.
 
 ## Release & distribution
+
+Run `just package` to produce the Chrome extension zip file in `build/`.
 
 Upload the built zip file on
 [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole).
