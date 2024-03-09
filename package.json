@@ -1,6 +1,6 @@
 {
   "name": "grzegorzssiteblocker",
-  "version": "1.16.0",
+  "version": "1.17.0",
   "description": "A simple Chrome extension that blocks undesirable domains, e.g., domains that are a waste of time like Reddit.",
   "keywords": [
     "chrome-extension"
