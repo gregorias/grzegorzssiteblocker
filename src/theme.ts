@@ -1,10 +1,13 @@
 // The material UI theme for the extension.
-import { createTheme } from "@mui/material/styles";
+import { createTheme as muiCreateTheme } from "@mui/material/styles";
 
-export const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#f44336",
+export const createTheme = function (prefersDarkMode: boolean) {
+  return muiCreateTheme({
+    palette: {
+      mode: prefersDarkMode ? "dark" : "light",
+      primary: {
+        main: "#f44336",
+      },
     },
-  },
-});
+  });
+};
