@@ -2,6 +2,10 @@
 build:
   npx webpack
 
+# Builds the package into a zip file in build/.
+package: build
+  ./dev/bin/package
+
 # Tests the package.
 test: build
   npx playwright test
