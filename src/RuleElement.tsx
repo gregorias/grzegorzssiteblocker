@@ -27,6 +27,8 @@ export function RuleElement(props: RuleElementProps): React.ReactElement {
     };
   }, [props.rule.pattern]);
 
+  // Don’t use `value` as this is not a controlled component.
+  // https://github.com/gregorias/grzegorzssiteblocker/issues/3.
   return (
     <div className="rule">
       <Checkbox
@@ -39,7 +41,7 @@ export function RuleElement(props: RuleElementProps): React.ReactElement {
         <TextField
           placeholder="facebook.com"
           variant="standard"
-          value={props.rule.pattern}
+          defaultValue={props.rule.pattern}
           inputProps={{
             autoCorrect: "off",
           }}
