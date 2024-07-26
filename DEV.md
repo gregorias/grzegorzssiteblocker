@@ -29,6 +29,12 @@ This section describes how to setup your development environment.
 
 1. Run `just test` to run automated tests.
 
+## Updating dependencies
+
+1. Run `npm update` to update dependencies. We use `>=` version specifiers to
+   not have to manually check for the newest major releases. If things break,
+   testing should catch, and we should fix them.
+
 ## Building
 
 Run `just build` to create an unpacked bundle in `dist/`.
