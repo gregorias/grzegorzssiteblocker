@@ -38,4 +38,11 @@ module.exports = {
       patterns: [{ from: ".", to: ".", context: "public" }],
     }),
   ],
+  // This is a Chrome extension, where thee content is loaded from the local
+  // machine. We don’t need to worry about file sizes as much. 4 MB is
+  // reasonable.
+  performance: {
+    maxAssetSize: 4_000_000,
+    maxEntrypointSize: 4_000_000,
+  },
 };
