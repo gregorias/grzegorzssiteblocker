@@ -17,7 +17,7 @@ export function RuleList(props: RuleListProps): React.ReactElement {
       {props.rules.map((rule, index) => {
         return (
           <RuleElement
-            key={index}
+            key={rule.id}
             rule={rule}
             onRuleChange={(newRule: Rule) => {
               let newRules = [...props.rules];

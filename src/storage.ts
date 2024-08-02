@@ -4,7 +4,7 @@
 
 export { storage };
 
-import { Rule } from "./rule";
+import { Rule, generateRuleId } from "./rule";
 
 /**
  * Serializes a list of rules into a list of pairs.
@@ -12,17 +12,17 @@ import { Rule } from "./rule";
  * @param rules - Rules to serialize.
  * @returns The serializable rules.
  */
-function serialize(rules: Rule[]): Array<[string, boolean]> | null {
+function serialize(rules: Rule[]): object[] | null {
   try {
-    return rules.map((rule: Rule) => [rule.pattern, rule.enabled]);
+    return rules.map((rule: Rule) => rule.serialize());
   } catch (e) {
     return null;
   }
 }
 
-function deserialize(data: Array<[string, boolean]>): Rule[] {
-  return data.map((pair) => {
-    return { enabled: pair[1], pattern: pair[0] };
+function deserialize(data: Array<object | [string, boolean]>): Rule[] {
+  return data.map((serializedRule: [string, boolean] | object) => {
+    return Rule.deserialize(serializedRule);
   });
 }
 

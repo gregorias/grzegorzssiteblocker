@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { createTheme } from "./theme";
-import { Rule } from "./rule";
+import { Rule, generateRuleId } from "./rule";
 import { RuleList } from "./RuleList";
 import { storage } from "./storage";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
@@ -55,7 +55,8 @@ export function OptionsPage(_props: OptionsPageProps): React.ReactElement {
           rules={rules}
           onRulesChange={storage.setRules}
           onAddRule={() => {
-            storage.setRules([...rules, new Rule(false, "")]);
+            let newRule = new Rule(generateRuleId(), false, "");
+            storage.setRules([...rules, newRule]);
           }}
         />
       </ThemeProvider>

@@ -34,7 +34,9 @@ export function RuleElement(props: RuleElementProps): React.ReactElement {
       <Checkbox
         checked={props.rule.enabled}
         onChange={(e) => {
-          props.onRuleChange(new Rule(e.target.checked, props.rule.pattern));
+          let changedRule = props.rule.clone();
+          changedRule.enabled = e.target.checked;
+          props.onRuleChange(changedRule);
         }}
       />
       <div className="rule--pattern">
@@ -51,7 +53,9 @@ export function RuleElement(props: RuleElementProps): React.ReactElement {
             !isPatternValid ? "Enter a valid regular expression" : undefined
           }
           onChange={(e) => {
-            props.onRuleChange(new Rule(props.rule.enabled, e.target.value));
+            let changedRule = props.rule.clone();
+            changedRule.pattern = e.target.value;
+            props.onRuleChange(changedRule);
           }}
         />
       </div>
