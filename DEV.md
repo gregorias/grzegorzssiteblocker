@@ -41,10 +41,9 @@ Run `just build` to create an unpacked bundle in `dist/`.
 
 ## Release & distribution
 
-Run `just package` to produce the Chrome extension zip file in `build/`.
-
-Upload the built zip file on
-[Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole).
+1. Update versions in `public/manifest.json` and `package.json`.
+2. Run `just package` to produce the Chrome extension zip file in `build/`.
+3. Upload the built zip file on [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole).
 
 ## ADRs
 
