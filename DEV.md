@@ -31,9 +31,10 @@ This section describes how to setup your development environment.
 
 ## Updating dependencies
 
-1. Run `npm update` to update dependencies. We use `>=` version specifiers to
-   not have to manually check for the newest major releases. If things break,
-   testing should catch, and we should fix them.
+1. Update version specifiers in `package.json`. We don’t use `>=`, because if
+   something breaks, it’s easier to just manually go through dependencies one
+   by one. Otherwise, it’s a big hassle to find what breaks.
+1. Run `npm update` to update dependencies.
 
 ## Building
 
