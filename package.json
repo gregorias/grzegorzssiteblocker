@@ -20,14 +20,14 @@
     "@mui/material": "^6.0.0"
   },
   "peerDependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@babel/core": ">=7.24.9",
+    "@babel/core": ">=7.27.4",
     "@babel/preset-env": ">=7.24.0",
     "@babel/preset-react": ">=7.23.3",
-    "@playwright/test": ">=1.42.1",
+    "@playwright/test": ">=1.53.1",
     "@types/chrome": ">=0.0.262",
     "@types/node": ">=20.11.24",
     "@types/react": ">=18.2.61",
