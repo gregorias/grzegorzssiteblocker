@@ -2,7 +2,7 @@ import React from "react";
 
 import { Rule } from "./rule";
 import { RuleElement } from "./RuleElement";
-import Button from "@mui/material/Button/Button";
+import Button from "@mui/material/Button";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 
 interface RuleListProps {

@@ -4,7 +4,7 @@ import { createTheme } from "./theme";
 import { Rule, generateRuleId } from "./rule";
 import { RuleList } from "./RuleList";
 import { storage } from "./storage";
-import ThemeProvider from "@mui/material/styles/ThemeProvider";
+import { ThemeProvider } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 interface OptionsPageProps {}
