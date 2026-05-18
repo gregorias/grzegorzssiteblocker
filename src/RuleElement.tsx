@@ -44,8 +44,10 @@ export function RuleElement(props: RuleElementProps): React.ReactElement {
           placeholder="facebook.com"
           variant="standard"
           defaultValue={props.rule.pattern}
-          inputProps={{
-            autoCorrect: "off",
+          slotProps={{
+            htmlInput: {
+              autoCorrect: "off",
+            },
           }}
           classes={{ root: "pattern" }}
           error={!isPatternValid}

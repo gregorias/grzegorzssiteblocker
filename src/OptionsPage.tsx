@@ -43,7 +43,7 @@ export function OptionsPage(_props: OptionsPageProps): React.ReactElement {
 
   useEffect(() => {
     storage.addListener(setRules);
-    () => {
+    return () => {
       storage.removeListener(setRules);
     };
   }, []);
