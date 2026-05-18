@@ -9,7 +9,7 @@
     "sourceMap": true,
     "rootDir": "src",
     "noEmitOnError": true,
-    "typeRoots": ["node_modules/@types"]
+    "types": ["chrome", "node"]
   },
   "exclude": ["tests/**", "playwright.config.ts"]
 }

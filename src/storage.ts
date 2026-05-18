@@ -67,7 +67,9 @@ class Storage {
           return;
         }
         try {
-          let rules = deserialize(data.blocked);
+          let rules = deserialize(
+            data.blocked as Array<object | [string, boolean]>,
+          );
           resolve(rules);
         } catch (e) {
           reject(e);
@@ -85,7 +87,11 @@ class Storage {
     let chromeListener: ChromeListener = (changes, areaName) => {
       if (areaName != "sync") return;
       if (!changes.blocked) return;
-      listener(deserialize(changes.blocked.newValue));
+      listener(
+        deserialize(
+          changes.blocked.newValue as Array<object | [string, boolean]>,
+        ),
+      );
     };
     this.clientListenersAndChromeListeners.push([listener, chromeListener]);
     chrome.storage.onChanged.addListener(chromeListener);
