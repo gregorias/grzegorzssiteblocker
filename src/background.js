@@ -53,12 +53,20 @@ function moveCurrentTabToWikipedia() {
 
 async function checkAndBlockCurrentSite() {
   let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  if (tab.url.startsWith("chrome")) {
+    // Do not do block "chrome*://".
+    // This prevents the user from blocking themselves out of this extension’s options
+    // (chrome-extension://ID/options.html).
+    return;
+  }
   let rules = await storage.getRules();
   for (let rule of rules) {
     if (!rule.enabled) continue;
     try {
       let re = new RegExp(rule.pattern);
-      if (tab.url.match(re)) moveCurrentTabToWikipedia();
+      if (tab.url.match(re)) {
+        moveCurrentTabToWikipedia();
+      }
     } catch (e) {}
   }
 }
